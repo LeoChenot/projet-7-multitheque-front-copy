@@ -1,0 +1,87 @@
+@use '../../styles/vars.scss';
+
+.contactPage {
+  display: flex;
+  align-items: stretch;
+  min-height: 100%;
+  justify-content: space-around;
+
+  &__person {
+    padding: 2em 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 1em;
+    // border: 0.2em solid vars.$primary-color;
+    border-radius: 0.2em;
+    width: 20%;
+
+    &-image {
+      width: 15em;
+      height: 15em;
+      border-radius: 100%;
+      background-repeat: no-repeat;
+      background-position: 50% 30%;
+      background-size: cover;
+    }
+    &-name {
+      text-align: center;
+      font-size: 2em;
+      line-height: normal;
+      font-weight: bold;
+    }
+
+    &-title {
+      font-size: 1.8em;
+    }
+
+    &-roles {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      row-gap: 1em;
+      // background-color: red;
+
+      &-list {
+        line-height: normal;
+        font-size: 1.2em;
+        ::before {
+          content: "• ";
+        }
+      }
+    }
+
+    &-socials {
+      // background-color: red;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      row-gap: 1em;
+
+      &-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      &-social {
+        font-size: 1.4em;
+        line-height: normal;
+        display: flex;
+        column-gap: 0.2em;
+
+        &:hover {
+          text-decoration: underline;
+        }
+
+        &-icon {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: vars.$primary-color;
+        }
+      }
+    }
+  }
+}

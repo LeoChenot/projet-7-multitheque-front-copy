@@ -1,0 +1,71 @@
+.myLibraryPage {
+  h2 {
+    font-weight: bold;
+    font-size: 1.4em;
+    margin: 20px 0px 50px 30px;
+  }
+  
+  
+  .myLibraryPage_Container {
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
+    // justify-content: center;
+    // background-color: lime;
+    padding: 0 2em;
+
+    &-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      // column-gap: 1em;
+      row-gap: 2em;
+    }
+
+    
+  }
+  
+  .myLibraryPage_Element {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 10px;
+    width: 10em;
+    text-align: center;
+    row-gap: 0.2em;
+    position: relative;
+  }
+  
+  .myLibraryPage_Element_img {
+    height: 14em;
+    width: 10em;
+  }
+
+  .listname {
+    position: absolute;
+    top: -1.4em;
+    align-self: center;
+    background-color: red;
+    color: #000;
+    font-weight: bold;
+    width: fit-content;
+    padding: 0.2em 1.2em;
+    border-top-left-radius: 2em;
+    border-top-right-radius: 2em;
+    text-transform: uppercase;
+  }
+
+  .checkColor {
+    background-color: #FBE7C6;
+  }
+  .favoriteColor {
+    background-color: #FFAEBC;
+  }
+  .wishlistColor {
+    background-color: #A0E7E5;
+  }
+  .in_progressColor {
+    background-color: #B4F8C8;
+  }
+
+}

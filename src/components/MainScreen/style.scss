@@ -1,0 +1,10 @@
+@use '../../styles/vars.scss';
+@use 'sass:color';
+
+.main__screen {
+  background-color: vars.$light-color;
+  flex: 1;
+  contain: strict;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}

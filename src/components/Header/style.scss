@@ -1,0 +1,212 @@
+@use '../../styles/vars.scss';
+@use 'sass:color';
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 1.2em;
+    user-select: none;
+    column-gap: 4em;
+
+    &__logoContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      column-gap: 0.5em;
+
+      &-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2.3em;
+        color: vars.$secondary-color;
+        transition: transform 500ms;
+        
+        &:hover {
+          transition: transform 300ms;
+          transform: scale(1.2);
+          cursor: pointer;
+        }
+  
+        &:active {
+          transition: transform 200ms;
+          transform: scale(1.35);
+        }
+      }
+
+      &-logo {
+        color: vars.$dark-color;
+        text-shadow: 1px 1px 0.05em vars.$dark-color;
+        font-weight: bold;
+        font-size: 2em;
+      }
+    }
+
+
+    &__searchBarContainer {
+      flex: 1;
+      max-width: 70em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border-radius: 10em;
+      padding: 0 1em;
+      background-color: white;
+      
+      &-searchIcon {
+        color: vars.$secondary-color;
+        border: none;
+        background: none;
+      }
+      
+      &-form {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &-searchBar {
+          flex: 1;
+          border: none;
+          outline: none;
+          padding: 0.5em;
+          font-size: 1.2em;
+        }
+
+        &-clearSearchBar {
+          align-self: stretch;
+          // background-color: lime;
+          background-color: transparent;
+          padding: 0.5em 0.5em 0.5em 0;
+          font-size: 1.2em;
+          color: vars.$secondary-color;
+          border: none;
+          outline: none;
+          transition: transform 500ms;
+          
+          &:hover {
+            transition: transform 300ms;
+            transform: scale(1.2);
+            cursor: pointer;
+          }
+    
+          &:active {
+            transition: transform 200ms;
+            transform: scale(1.35);
+          }
+
+          &-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: rotate(45deg);
+          }
+
+        }
+
+        &-filters {
+          align-self: stretch;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          column-gap: 0.5em;
+          padding-left: 0.5em;
+          border-left: 0.2em solid color.scale(vars.$primary-color, $lightness: 24%);
+
+          &-option {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            &-icon {
+              font-size: 1.5em;
+              color: vars.$secondary-color;
+              transition: transform 500ms;
+              
+              &:hover {
+                transition: transform 300ms;
+                transform: scale(1.2);
+                cursor: pointer;
+              }
+        
+              &:active {
+                transition: transform 200ms;
+                transform: scale(1.35);
+              }
+            }
+
+            &-checkbox {
+              display: none;
+            }
+
+            &-checkbox:checked + &-icon {
+              color: red;
+            }
+          }
+        }
+      }
+    }
+    
+    &__userActionsContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      column-gap: 1.5em;
+      // max-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      position: fixed;
+      right: -30em;
+      margin-right: 2em;
+      opacity: 0;
+      transition: opacity 2s, margin-right 800ms cubic-bezier(.60,-0.3,.30,1.5);
+      
+      &--active {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        column-gap: 1.5em;
+        max-width: 15em;
+        white-space: nowrap;
+        opacity: 1;
+        transition: opacity 2s, margin-right 800ms cubic-bezier(.60,-0.3,.30,1.5);
+      }
+      
+      &-actionContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        &--active &-logo {
+          transition: transform 300ms;
+          transform: scale(1.2);
+        }
+        
+        &-logo {
+          font-size: 2em;
+          color: vars.$secondary-color;
+          transition: transform 500ms;
+          
+          &:hover {
+            transition: transform 300ms;
+            transform: scale(1.2);
+          }
+          
+          &:active {
+            transition: transform 200ms;
+            transform: scale(1.35);
+          }
+        }
+        
+        &-name {
+          font-size: 1.2em;
+          font-weight: 500;
+        }
+      }
+    }
+}
+

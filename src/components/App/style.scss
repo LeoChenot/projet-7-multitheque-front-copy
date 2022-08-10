@@ -1,0 +1,12 @@
+@use '../../styles/vars.scss';
+@use 'sass:color';
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  background-color: color.scale(vars.$primary-color, $lightness: 24%);
+
+  overflow: hidden;
+}

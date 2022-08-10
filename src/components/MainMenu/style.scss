@@ -1,0 +1,58 @@
+@use '../../styles/vars.scss';
+@use 'sass:color';
+
+.main__menu {
+  display: flex;
+  flex-direction: column;
+
+  background-color: vars.$primary-color;
+  padding: 0.5em 0;
+  width: 18em;
+  contain: strict;
+
+  overflow-y: auto;
+  scroll-behavior: smooth;
+
+  transition: width 550ms cubic-bezier(.60,-0.3,.30,1.5);
+  
+  overflow-x: hidden;
+
+  &-section {
+    border-top: 0.2em solid color.scale(vars.$primary-color, $blackness: 10%);
+    padding: 1em 0;
+
+    &--first {
+      padding: 1em 0;
+    }
+
+    &-label {
+      display: inline-block;
+      padding: 0 1.2em 1em 1.2em;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: color.scale(vars.$primary-color, $blackness: 20%);
+      white-space: nowrap;
+    }
+  }
+  
+  &-link {
+    display: flex;
+    align-items: center;
+    column-gap: 1em;
+
+    font-size: 1.4em;
+    color: vars.$light-color;
+    padding: 0.5em 1em;
+    transition: background-color 600ms;
+    white-space: nowrap;
+
+    &:hover {
+      transition: background-color 200ms;
+      background-color: color.scale(vars.$primary-color, $lightness: 24%);
+    }
+
+    &--active {
+      background-color: color.scale(vars.$primary-color, $lightness: 24%);
+    }
+  }
+}

@@ -1,0 +1,70 @@
+@use '../../styles/vars.scss';
+@use 'sass:color';
+
+.registerPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+
+  &__title {
+    font-weight: bold;
+    font-size: 2em;
+    color: vars.$secondary-color;
+  }
+  
+  &__form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2em;
+    background-color: color.scale(vars.$primary-color, $lightness: 24%);
+    border: 0.5em solid vars.$primary-color;
+    padding: 3em;
+    // width: 40%;
+    border-radius: 1em;
+    overflow: hidden;
+
+    &-submit {
+      width: fit-content;
+      color: vars.$light-color;
+      background-color: vars.$primary-color;
+      padding: 0.4em 1em;
+      font-size: 1.2em;
+      border: none;
+      outline: none;
+      border-radius: 10em;
+      align-self: flex-end;
+    }
+
+    &-fieldset {
+      display: flex;
+      column-gap: 1em;
+      flex-wrap: wrap;
+      
+      &-container {
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.2em;
+        flex: 1;
+
+        &-label {
+          font-size: 1.4em;
+        }
+
+        &-input {
+          font-size: 1.2em;
+          padding: 0.4em 1em;
+          border: none;
+          outline: none;
+          background-color: vars.$primary-color;
+          color: vars.$light-color;
+        }
+      }
+    }
+  }
+}
+
+.labelPassword {
+  width: 17em;
+}

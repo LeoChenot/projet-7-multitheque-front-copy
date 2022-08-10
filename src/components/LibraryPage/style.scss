@@ -1,0 +1,58 @@
+@use '../../styles/vars.scss';
+
+.Movie {
+  padding: 1em;
+  // user-select: auto;
+
+
+  &-title {
+    font-weight: bold;    
+    font-size: 2em;
+    margin-bottom: 1.2em;
+  }
+
+  .glide {    
+    cursor: auto;
+  }
+
+  .glide__slides {
+    padding-bottom: 3em;
+  } 
+
+  .glide__slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 0.2em;
+    text-align: center;
+    will-change: transform;
+
+    transform-origin: 50% 0;
+    transition: transform 400ms;
+
+    
+    &--active {
+      transition: transform 200ms;
+      transform-origin: 50% 0;
+      transform: scale(1.1);
+    }
+    
+    &-image {
+      transition: transform 400ms;
+      height: 14em;
+      width: 10em;
+    }
+  }
+}
+
+
+.glide__slide:not(.glide__slide--active) {
+  // transform-origin: 0% 50%;
+  // transform: perspective(1500px) rotateY(-20deg);
+  // transform: rotateY(45deg);
+}
+
+.glide__arrow {
+  background-color: vars.$primary-color;
+}
