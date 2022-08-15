@@ -32,7 +32,7 @@ function BookDetails() {
           headers: {
             "authorization": token
           },
-        });             
+        });        
         if (response.request.response === `{"message":"This Media is not in user Library yet","avg_rating":[]}`) {
           setInLibrary(false);
         } else {
@@ -160,8 +160,9 @@ function BookDetails() {
           {typeof bookDetailsResult.volumeInfo.imageLinks !== 'undefined' && (
           <img src={bookDetailsResult.volumeInfo.imageLinks.thumbnail} alt="" />         
           )}
-           
+          {typeof bookDetailsResult.volumeInfo.publishedDate !== "undefined" && (
             <h2 className="mediaDetails__mediaReleaseYear">({bookDetailsResult.volumeInfo.publishedDate.substring(0,4)})</h2>
+          )}
             <h2 className="mediaDetails__mediaRunTime">{bookDetailsResult.volumeInfo.pageCount} pages</h2>
             <div className='mediaDetails__mediaGenreContainer'>
               <h4 className="mediaDetails__mediaGenre">{bookDetailsResult.volumeInfo.categories}</h4>
