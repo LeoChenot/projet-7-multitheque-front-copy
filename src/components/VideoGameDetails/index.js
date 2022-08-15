@@ -10,22 +10,66 @@ function VideoGameDetails() {
   const dispatch = useDispatch();
 
   const token = localStorage.getItem('token');
+  const userId = localStorage.getItem('userId');
   const { videoGameDetailsLoading, videoGameDetailsResult } = useSelector((state) => state.videoGameDetails);
   const videoGameId = useParams().mediaId;
   const [inLibrary, setInLibrary] = useState(false);
+  const [reviewDetails, setReviewDetails] = useState({});
+  const [libraryList, setLibraryList] = useState('');
   const { auth } = useSelector((state) => state.user);
-  let baseURL = "https://image.tmdb.org/t/p/original";
 
   useEffect(() => {
     dispatch(fetchVideoGameDetailsById(videoGameId));
-  }, []);
+  }, [userId]);
+  useEffect(() => {    
+    GetReview();      
+  }, [libraryList, inLibrary]);
+
+  if (videoGameDetailsResult) {
+    console.log(videoGameDetailsResult.background_image);
+  }
+
+  async function GetReview() {
+    console.log('get')
+      try {
+        const response = await axios.get(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`,{
+          headers: {
+            "authorization": token
+          },
+        });
+        console.log(response);             
+        if (response.request.response === `{"message":"This Media is not in user Library yet","avg_rating":[]}`) {
+          setInLibrary(false);
+        } else {
+          setInLibrary(true);
+          setLibraryList(response.data.user_review_details[0].listname);
+        }
+        // setInLibrary(false); 
+      } catch (error) {
+        console.log(error);
+      }
+  };
+
+  async function DeleteReview() {
+    try {
+      const response = await axios.delete(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`,{
+        headers: {
+          "authorization": token
+        },
+      });
+      setInLibrary(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   async function PostReview(list, title, coverURL) {
     console.log('post')
       try {
         console.log(list)
         console.log(title)
-        const response = await axios.post(`https://collectio-app.herokuapp.com/api/video-games/${videoGameId}`, {
+        console.log(coverURL);
+        const response = await axios.post(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`, {
            "list": list,
            "title": title,
            "coverURL": coverURL
@@ -34,33 +78,27 @@ function VideoGameDetails() {
             "authorization": token
           },
         })
-        console.log(response);
-        //setResults(response.data[0].note_moyenne)
-        //console.log(results);
+        setInLibrary(true);
+        setLibraryList(list);
       } catch (error) {
         console.log(error)
       }
 
   }
 
-  
-
-
   async function PatchReview(list) {
 
     console.log('patch')
      try {
 
-       const response = await axios.patch(`https://collectio-app.herokuapp.com/api/video-games/${videoGameId}`, {
+       const response = await axios.patch(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`, {
           "list": list
         }, {
          headers: {
            "authorization": token
          },
        })
-       console.log(response);
-       //setResults(response.data[0].note_moyenne)
-       //console.log(results);
+       setLibraryList(list);
      } catch (error) {
        console.log(error)
      }
@@ -86,26 +124,38 @@ function VideoGameDetails() {
     {videoGameDetailsLoading ? (
       <Loader />
     ) : (
-      <div className="mediaContainer">
-        <div className="mediaRatingContainer">
-        <div className="collectioRatingContainer">
+    <div className="mediaContainer">
+      <div className="mediaRatingContainer">
+          {auth && <div className="collectioRatingContainer">
             <span className="fa fa-star"></span>
             <span className="fa fa-star"></span>
             <span className="fa fa-star checked"></span>
             <span className="fa fa-star checked"></span>
-            <span className="fa fa-star checked"></span>
-
-          </div> 
-          <div className="userRatingContainer">
+            <span className="fa fa-star checked"></span>       
+          </div>}
+          <div className='userRatingContainer'>  
             <span className="fa fa-star"></span>
             <span className="fa fa-star checked"></span>
             <span className="fa fa-star checked"></span>
             <span className="fa fa-star checked"></span>
             <span className="fa fa-star checked"></span>
           </div>
-
-          </div> 
-        
+          {auth && <div className='mediaUserReview'>
+              <button type="button" className="button button--review">
+                <span className="button__text">Rating</span>              
+                <span className="button__icon">
+                <ion-icon name="star"></ion-icon>
+                </span>
+              </button>
+              <button type="button" className="button button--review">
+                <span className="button__text">Review</span>              
+                <span className="button__icon">
+                <ion-icon name="reader"></ion-icon>
+                <ion-icon name="pencil"></ion-icon>        
+                </span>
+              </button>  
+            </div>}
+        </div>
         <div className="mediaImageContainer">  
             <h1 className="mediaDetails__mediaTitle">{videoGameDetailsResult.name_original}</h1>
             <img src={videoGameDetailsResult.background_image} alt="" />
@@ -128,105 +178,70 @@ function VideoGameDetails() {
 
           </div>       
           <div className="mediaTextContainer">   
-          {auth && (
-            <div>
-
-      
-            <div className='mediaUserReview'>
-             
-                <button type="button" class="button -review">
-                <span className="button__text">Rating</span>              
-                <span className="button__icon">
-                <ion-icon name="star"></ion-icon>
-                </span>
-                </button>
-           
-                  
-        
-          
-                <button type="button" class="button -review">
-                <span className="button__text">Review</span>              
-                <span className="button__icon">
-                <ion-icon name="reader"></ion-icon>
-                <ion-icon name="pencil"></ion-icon>        
-                </span>
-                </button>  
-             
-              
+          <div>
+            { inLibrary &&  <div><p>{reviewDetails.note}</p><p>{reviewDetails.comment}</p></div>}
           </div>
-              
+          {auth && (
+          <div>              
           <div className='mediaUserListContainer'>
-            { inLibrary?
-
-
-
-            // si PAS de token, griser les boutons d'ajout de liste
-              <button type="button" className="button--activelist" value='wishlist' onClick={() => PatchReview('wishlist')}>
+          {inLibrary &&
+              <button type="button" className="button button--delete" onClick={() => DeleteReview()}>
+                <span className="button__text">Delete</span>
+                <span className="button__icon">
+                <ion-icon name="trash-outline"></ion-icon></span>
+              </button>}
+              { inLibrary?
+              <button type="button" className={`button ${libraryList === 'wishlist' ? "button--dark_green" : ""}`} value='wishlist' onClick={() => PatchReview('wishlist')}>
                 <span className="button__text">Wishlist</span>
                 <span className="button__icon">
                 <ion-icon name="bookmark"></ion-icon></span>
               </button>
-            :
-                <button type="button" className="button" value='wishlist' onClick={() => PostReview('wishlist', videoGameDetailsResult.videoGameDetailsResult.original_title, `${baseURL}${videoGameDetailsResult.videoGameDetailsResult.poster_path}`)}>
-                  <span className="button__text">Wishlist</span>
+              :
+              <button type="button" className="button" value='wishlist' onClick={() => PostReview('wishlist', videoGameDetailsResult.name_original, videoGameDetailsResult.background_image)}>
+                <span className="button__text">Wishlist</span>
+                <span className="button__icon">
+                <ion-icon name="bookmark"></ion-icon></span>
+              </button>}
+              { inLibrary?
+              <button type="button" className={`button ${libraryList === 'favorite' ? "button--dark_green" : ""}`} value='favorite' onClick={() => PatchReview('favorite')}>
+                  <span className="button__text">Favorite</span>
                   <span className="button__icon">
-                  <ion-icon name="bookmark"></ion-icon></span>
-                </button>
-
-            }
-
-            { inLibrary?
-
-            // si PAS de token, griser les boutons d'ajout de liste
-              <button type="button" className="button--activelist" value='favorites' onClick={() => PatchReview('favorites')}>
-                  <span className="button__text">Favorites</span>
-                  <span className="button__icon">
-                  <ion-icon name="bookmark"></ion-icon></span>
-                </button>
-            :                    
-
-              <button type="button" className="button" value='favorites' onClick={() => PostReview('favorites', videoGameDetailsResult.videoGameDetailsResult.original_title, videoGameDetailsResult.videoGameDetailsResult.poster_path)}>
-              <span className="button__text">Favorites</span>
-              <span className="button__icon">
-                <ion-icon name="heart"></ion-icon></span>
+                  <ion-icon name="heart"></ion-icon></span>
               </button>
-                
-            }   
-
-            { inLibrary? 
-
-              <button type="button" className="button--activelist" value='check' onClick={() => PatchReview('check')}>
-              <span className="button__text">Add to Library</span>
-              <span className="button__icon">
+              :                    
+              <button type="button" className="button" value='favorite' onClick={() => PostReview('favorite', videoGameDetailsResult.name_original, videoGameDetailsResult.background_image)}>
+                <span className="button__text">Favorite</span>
+                <span className="button__icon">
+                  <ion-icon name="heart"></ion-icon></span>
+              </button>}
+              { inLibrary? 
+              <button type="button" className={`button ${libraryList === 'check' ? "button--dark_green" : ""}`} value='check' onClick={() => PatchReview('check')}>
+                <span className="button__text">To Library</span>
+                <span className="button__icon">
+                  <ion-icon name="checkmark"></ion-icon>
+                </span>
+              </button>
+              :
+              <button type="button" className="button" value='check' onClick={() => PostReview('check', videoGameDetailsResult.name_original, videoGameDetailsResult.background_image)}>
+                <span className="button__text">To Library</span>
+                <span className="button__icon">
                 <ion-icon name="checkmark"></ion-icon>
-              </span>
+                </span>
+              </button>}
+              { inLibrary? 
+              <button type="button" className={`button ${libraryList === 'in_progress' ? "button--dark_green" : ""}`} value='in_progress' onClick={() => PatchReview("in_progress")}>
+                <span className="button__text">In Progress</span>
+                <span className="button__icon">
+                  <ion-icon name="eye"></ion-icon>
+                </span>
               </button>
-            :
-              <button type="button" className="button" value='check' onClick={() => PostReview('check', videoGameDetailsResult.videoGameDetailsResult.original_title, videoGameDetailsResult.videoGameDetailsResult.poster_path)}>
-              <span className="button__text">Add to Library</span>
-              <span className="button__icon">
-              <ion-icon name="checkmark"></ion-icon>
-              </span>
-              </button>
-            }
-
-            { inLibrary? 
-
-            // si PAS de token, griser les boutons d'ajout de liste
-              <button type="button" className="button--activelist" value='in_progress' onClick={() => PatchReview("in progress")}>
-              <span className="button__text">In Progress</span>
-              <span className="button__icon">
+              :
+              <button type="button" className="button" value='in_progress' onClick={() => PostReview('in_progress', videoGameDetailsResult.name_original, videoGameDetailsResult.background_image)}>
+                <span className="button__text">In Progress</span>
+                <span className="button__icon">
                 <ion-icon name="eye"></ion-icon>
-              </span>
-              </button>
-            :
-              <button type="button" className="button" value='in_progress' onClick={() => PostReview('in progress', videoGameDetailsResult.videoGameDetailsResult.original_title, videoGameDetailsResult.videoGameDetailsResult.poster_path)}>
-              <span className="button__text">In Progress</span>
-              <span className="button__icon">
-              <ion-icon name="eye"></ion-icon>
-              </span>
-              </button>
-            }
+                </span>
+              </button>}
           </div>
                       
           
@@ -234,13 +249,9 @@ function VideoGameDetails() {
           </div>  
 
         )}
-            
-
-            <div className="mediaOverviewContainer">
-
-              <h4 className="mediaDetails__mediaOverview">{videoGameDetailsResult.description_raw}</h4>           
-              </div>
-
+          <div className="mediaOverviewContainer">
+            <h4 className="mediaDetails__mediaOverview">{videoGameDetailsResult.description_raw}</h4>           
+          </div>
         </div>
 
           {/* <br />

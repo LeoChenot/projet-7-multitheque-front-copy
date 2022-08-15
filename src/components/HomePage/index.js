@@ -2,7 +2,7 @@ import Glide from '@glidejs/glide/dist/glide';
 import "@glidejs/glide/dist/css/glide.core.min.css";
 import "@glidejs/glide/dist/css/glide.theme.min.css";
 
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './style.scss';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,11 +13,12 @@ import {
   fetchLatestVideoGamesRelease,
 } from '../../actions/homePage';
 import Loader from '../Loader';
+import { useLayoutEffect } from 'react';
 
 function HomePage() {
-
   const dispatch = useDispatch();
   const isInitialMount = useRef(true);
+  const homePageDiv = useRef(null);
 
   const menuIsOpen = useSelector((state) => state.mainMenu.isOpen);
   const { 
@@ -98,8 +99,6 @@ function HomePage() {
     }
   }, [latestVideoGamesReleaseLoading]);
 
-  
-
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
@@ -114,46 +113,8 @@ function HomePage() {
     }
   }, [menuIsOpen]);
 
-
-  // useEffect(() => {
-  //   if (typeof latestMoviesReleaseResult !== 'undefined') {
-  //     const slideActive = document.querySelector('.glide__slide--active');
-  //     if (gliderOptions.perView === 9) {
-  //       const currentSlide = slideActive.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling;
-  //       currentSlide.style.transition = "transform 200ms";
-  //       currentSlide.style.transformOrigin = "50% 0";
-  //       currentSlide.style.transform = "scale(1.1)";
-  //     }
-  //     else if (gliderOptions.perView === 7) {
-  //       const currentSlide = slideActive.nextElementSibling.nextElementSibling.nextElementSibling;
-  //       currentSlide.style.transition = "transform 200ms";
-  //       currentSlide.style.transformOrigin = "50% 0";
-  //       currentSlide.style.transform = "scale(1.1)";
-  //     }
-  //     else if (gliderOptions.perView === 5) {
-  //       const currentSlide = slideActive.nextElementSibling.nextElementSibling;
-  //       currentSlide.style.transition = "transform 200ms";
-  //       currentSlide.style.transformOrigin = "50% 0";
-  //       currentSlide.style.transform = "scale(1.1)";
-  //     }
-  //     else if (gliderOptions.perView === 3) {
-  //       const currentSlide = slideActive.nextElementSibling;
-  //       currentSlide.style.transition = "transform 200ms";
-  //       currentSlide.style.transformOrigin = "50% 0";
-  //       currentSlide.style.transform = "scale(1.1)";
-  //     }
-  //     else if (gliderOptions.perView === 1) {
-  //       const currentSlide = slideActive;
-  //       currentSlide.style.transition = "transform 200ms";
-  //       currentSlide.style.transformOrigin = "50% 0";
-  //       currentSlide.style.transform = "scale(1.1)";
-  //     }
-  //   }
-  //   // console.log(slideActive.nextElementSibling);
-  // }, [latestMoviesReleaseResult, gliderOptions.perView]);
-
   return (
-    <div className="homePage">
+    <div className="homePage" ref={homePageDiv}>
         <div className="homePage-container">
           <h2 style={{ fontWeight: 'bold', fontSize: '2em', marginBottom: '1.2em' }}>Movies</h2>
           {latestMoviesReleaseLoading ? (

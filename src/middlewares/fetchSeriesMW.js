@@ -7,7 +7,7 @@ const instance = axios.create({
   baseURL: 'https://api.themoviedb.org/3',
 });
 
-const seriesApiKey = '53d8914dec27b153e9ddc38fedcfb93e';
+const seriesApiKey = '6131d818d4662f765b6cac7e2bcddae1';
 const defaultTimeout = 500;
 const timeout = 1000;
 

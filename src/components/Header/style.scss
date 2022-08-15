@@ -15,6 +15,10 @@
       align-items: center;
       column-gap: 0.5em;
 
+      &-userActionsContainer {
+        display: none;
+      }
+
       &-button {
         display: flex;
         justify-content: center;
@@ -56,9 +60,24 @@
       background-color: white;
       
       &-searchIcon {
+        display: flex;
         color: vars.$secondary-color;
         border: none;
         background: none;
+        font-size: 1.2em;
+        padding: 0;
+        transition: transform 500ms;
+
+        &:hover {
+          transition: transform 300ms;
+          transform: scale(1.2);
+          cursor: pointer;
+        }
+        
+        &:active {
+          transition: transform 200ms;
+          transform: scale(1.35);
+        }
       }
       
       &-form {
@@ -67,13 +86,20 @@
         justify-content: center;
         align-items: center;
 
-        &-searchBar {
+        &-searchBarBox {
           flex: 1;
-          border: none;
-          outline: none;
-          padding: 0.5em;
-          font-size: 1.2em;
+          overflow: hidden;
+
+          &-searchBar {
+            width: 100%;
+
+            border: none;
+            outline: none;
+            padding: 0.5em;
+            font-size: 1.2em;
+          }
         }
+
 
         &-clearSearchBar {
           align-self: stretch;
@@ -210,3 +236,41 @@
     }
 }
 
+// Media query qui prend effet lorsque la largeur est inférieur à 480px (smartphone)
+@media screen and (max-width: 480px) {
+  // Header
+  .header {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1em;
+
+    // Div contenant les boutons Login et Register après la barre de recherche
+    &__userActions {
+      display: none;
+    }
+
+    // Div contenant : 
+    // • le bouton pour afficher/cacher le MainMenu
+    // • le nom Collectio
+    // • Une Div contenant les boutons Login et Register qui est par défaut en display:none;
+    &__logoContainer {
+      justify-content: space-between;
+      width: 100%;
+
+      // La Div contenant les boutons Login et Register qui est par défaut en display:none; que l'on passe en display:block;
+      &-userActionsContainer {
+        display: block;
+      }
+    }
+
+    // Barre de recherche
+    &__searchBarContainer-form-searchBar {
+      width: 60vw;
+    }
+
+    // Filtres de la barre de recherche
+    &__searchBarContainer-form-filters {
+      display: none;
+    }
+  }
+}

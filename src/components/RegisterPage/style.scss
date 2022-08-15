@@ -35,6 +35,17 @@
       outline: none;
       border-radius: 10em;
       align-self: flex-end;
+      transition: transform 500ms;
+
+      &:hover {
+        transition: transform 300ms;
+        transform: scale(1.1);
+      }
+      
+      &:active {
+        transition: transform 200ms;
+        transform: scale(1.2);
+      }
     }
 
     &-fieldset {

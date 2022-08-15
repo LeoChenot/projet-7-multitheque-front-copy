@@ -2,6 +2,7 @@ import './style.scss';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Loader from '../Loader';
 
 const MyLibraryPage = (props) => {
   const libraryType = props.library;
@@ -13,6 +14,7 @@ const MyLibraryPage = (props) => {
 
   const fetchLibrary = async () => {
     setLibraryList([]);
+    setIsLoaded(false);
     try {
       const response = await axios.get(`https://collectio-app.herokuapp.com/api/${libraryType}`, { 
         headers: {
@@ -21,8 +23,10 @@ const MyLibraryPage = (props) => {
        });
       if (response.status === 200) {
         console.log('response :', response.data);
-        setIsLoaded(true)
-        setLibraryList(response.data)
+        setLibraryList(response.data);
+        setTimeout(() => {
+          setIsLoaded(true);
+        }, 500);
       };
     } catch (error) {
       console.log(error)
@@ -35,26 +39,56 @@ const MyLibraryPage = (props) => {
     //}
   }, [libraryType])
 
+  useEffect(() => {
+    console.log({ isLoaded });
+  }, [isLoaded]);
+
   console.log(libraryList)
 
-  if (isLoaded) {
+  if (libraryList.length === 0) {
     return (
       <section className="myLibraryPage">
         <h2>My Library</h2>
         <div className="myLibraryPage_Container">
+          {!isLoaded ? (
+            <Loader />
+          ) : (
+          <div className='myLibraryPage_Container-container'>
+            <h3>You don't have any {libraryType}.</h3>
+          </div>
+          )}
+        </div>
+      </section>
+    )
+  }
+  else {
+    return (
+      <section className="myLibraryPage">
+        <h2>My Library</h2>
+        <div className="myLibraryPage_Container">
+          {!isLoaded ? (
+            <Loader />
+          ) : (
           <div className='myLibraryPage_Container-container'>
             {libraryList.map(el => (
-              <Link to={`/${el.mediatypename === 'video_game' ? 'video-games' : (el.mediatypename !== 'series' ? `${el.mediatypename}s` : el.mediatypename)}/${el.apimediaid}`}>
+              <Link key={el.apimediaid} to={`/${el.mediatypename === 'video_game' ? 'video-games' : (el.mediatypename !== 'series' ? `${el.mediatypename}s` : el.mediatypename)}/${el.apimediaid}`}>
                 <div className='myLibraryPage_Element' key={el.apimediaid}>
-                    <img className='myLibraryPage_Element_img' src={`${el.coverurl.startsWith('/') ? baseURL : ''}${el.coverurl}`} alt="blabla"></img>
+                    <img className='myLibraryPage_Element_img' src={`${el.coverurl.startsWith('/') ? baseURL : ''}${el.coverurl}`} alt={el.title} />
                     <p>{el.title}</p>
                     <p className={`listname ${el.listname}Color`}>
-                      {el.mediatypename === 'video_game' ? el.listname === 'check' ? 'played' : el.listname : el.mediatypename === 'book' ? el.listname === 'check' ? 'read' : el.listname : (el.listname === 'check' ? 'watched' : el.listname)}
+                      {
+                        el.mediatypename === 'movie' ? el.listname === 'check' ? 'watched' : el.listname === 'in_progress' ? 'in progress' : el.listname
+                        : el.mediatypename === 'series' ? el.listname === 'check' ? 'watched' : el.listname === 'in_progress' ? 'in progress' : el.listname
+                        : el.mediatypename === 'book' ? el.listname === 'check' ? 'read' : el.listname === 'in_progress' ? 'in progress' : el.listname
+                        : el.mediatypename === 'video_game' ? el.listname === 'check' ? 'played' : el.listname === 'in_progress' ? 'in progress' : el.listname
+                        : el.listname
+                      }
                     </p>
                   </div>
               </Link>
             ))}
           </div>
+          )}
         </div>
       </section>
     )

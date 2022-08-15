@@ -69,13 +69,64 @@ function Header() {
         >
           Collectio
         </Link>
+        <div className='header__logoContainer-userActionsContainer'>
+          <div className={`header__userActionsContainer${!auth ? '--active' : ''}`}>
+            <NavLink
+              to="/login"
+              className={({isActive}) => `header__userActionsContainer-actionContainer header__userActionsContainer-actionContainer${isActive ? '--active' : ''}`}
+            >
+              <div className='header__userActionsContainer-actionContainer-logo'>
+                <FaSignInAlt />
+              </div>
+              <span className='header__userActionsContainer-actionContainer-name'>Login</span>
+            </NavLink>
+            <NavLink
+              to="/register"
+              className={({isActive}) => `header__userActionsContainer-actionContainer header__userActionsContainer-actionContainer${isActive ? '--active' : ''}`}
+            >
+              <div className='header__userActionsContainer-actionContainer-logo'>
+                <FaPen />
+              </div>
+              <span className='header__userActionsContainer-actionContainer-name'>Register</span>
+            </NavLink>
+          </div>
+          <div className={`header__userActionsContainer${auth ? '--active' : ''}`}>
+            <NavLink
+              to={`/profile/${localStorage.getItem('userId')}`}
+              className={({isActive}) => `header__userActionsContainer-actionContainer header__userActionsContainer-actionContainer${isActive ? '--active' : ''}`}
+            >
+              <div className='header__userActionsContainer-actionContainer-logo'>
+                <FaUserAlt />
+              </div>
+              <span className='header__userActionsContainer-actionContainer-name'>My profile</span>
+            </NavLink>
+            <NavLink
+              to="/logout"
+              className={({isActive}) => `header__userActionsContainer-actionContainer header__userActionsContainer-actionContainer${isActive ? '--active' : ''}`}
+            >
+              <div className='header__userActionsContainer-actionContainer-logo'>
+                <FaSignOutAlt />
+              </div>
+              <span className='header__userActionsContainer-actionContainer-name'>Logout</span>
+            </NavLink>
+          </div>
+        </div>
       </div>
       <div className='header__searchBarContainer'>
-        <div className='header__searchBarContainer-searchIcon'>
-          <FaSearch />
-        </div>
         <form className='header__searchBarContainer-form' onSubmit={handleSubmit}>
-          <input ref={searchBarElement} className='header__searchBarContainer-form-searchBar' type="text" placeholder='Search media...' value={searchBar} onChange={(event) => dispatch(changeInputValueHeader("searchBar", event.target.value))} />
+          <button className='header__searchBarContainer-searchIcon' type="submit">
+            <FaSearch />
+          </button>
+          <div className='header__searchBarContainer-form-searchBarBox'>
+            <input
+              ref={searchBarElement}
+              className='header__searchBarContainer-form-searchBarBox-searchBar'
+              type="text"
+              placeholder='Search media...' 
+              value={searchBar}
+              onChange={(event) => dispatch(changeInputValueHeader("searchBar", event.target.value))}
+            />
+          </div>
           {searchBar.length > 0 && (
             <button type='button' className='header__searchBarContainer-form-clearSearchBar' onClick={handleClearSearchBar}>
               <div className='header__searchBarContainer-form-clearSearchBar-icon'>
@@ -83,25 +134,6 @@ function Header() {
               </div>
             </button>
           )}
-        
-        {/* <form className='header__searchBarContainer-form' onSubmit={handleSubmit}>
-            <button className='header__searchBarContainer-searchIcon' type='submit'>
-              <FaSearch />
-            </button>
-            <input 
-                className='header__searchBarContainer-form-searchBar' 
-                type="text"
-                value={searchBar}
-                onChange={(event) => {
-                  dispatch(searchTitleValue(event.target.value))
-              }}
-                placeholder='Search media...' />
-          
-          {true && <button type='button' className='header__searchBarContainer-form-clearSearchBar'>
-            <div className='header__searchBarContainer-form-clearSearchBar-icon'>
-              <FaPlus />
-            </div>
-          </button>} */}
           <div className='header__searchBarContainer-form-filters'>
             {categoriesData.map((category) =>(
               <div className='header__searchBarContainer-form-filters-option' key={category.name}>
@@ -115,45 +147,47 @@ function Header() {
         </form>
         
       </div>
-        <div className={`header__userActionsContainer${!auth ? '--active' : ''}`}>
-          <NavLink
-            to="/login"
-            className={({isActive}) => `header__userActionsContainer-actionContainer header__userActionsContainer-actionContainer${isActive ? '--active' : ''}`}
-          >
-            <div className='header__userActionsContainer-actionContainer-logo'>
-              <FaSignInAlt />
-            </div>
-            <span className='header__userActionsContainer-actionContainer-name'>Login</span>
-          </NavLink>
-          <NavLink
-            to="/register"
-            className={({isActive}) => `header__userActionsContainer-actionContainer header__userActionsContainer-actionContainer${isActive ? '--active' : ''}`}
-          >
-            <div className='header__userActionsContainer-actionContainer-logo'>
-              <FaPen />
-            </div>
-            <span className='header__userActionsContainer-actionContainer-name'>Register</span>
-          </NavLink>
-        </div>
-        <div className={`header__userActionsContainer${auth ? '--active' : ''}`}>
-          <NavLink
-            to={`/profile/${localStorage.getItem('userId')}`}
-            className={({isActive}) => `header__userActionsContainer-actionContainer header__userActionsContainer-actionContainer${isActive ? '--active' : ''}`}
-          >
-            <div className='header__userActionsContainer-actionContainer-logo'>
-              <FaUserAlt />
-            </div>
-            <span className='header__userActionsContainer-actionContainer-name'>My profile</span>
-          </NavLink>
-          <NavLink
-            to="/logout"
-            className={({isActive}) => `header__userActionsContainer-actionContainer header__userActionsContainer-actionContainer${isActive ? '--active' : ''}`}
-          >
-            <div className='header__userActionsContainer-actionContainer-logo'>
-              <FaSignOutAlt />
-            </div>
-            <span className='header__userActionsContainer-actionContainer-name'>Logout</span>
-          </NavLink>
+        <div className='header__userActions'>
+          <div className={`header__userActionsContainer${!auth ? '--active' : ''}`}>
+            <NavLink
+              to="/login"
+              className={({isActive}) => `header__userActionsContainer-actionContainer header__userActionsContainer-actionContainer${isActive ? '--active' : ''}`}
+            >
+              <div className='header__userActionsContainer-actionContainer-logo'>
+                <FaSignInAlt />
+              </div>
+              <span className='header__userActionsContainer-actionContainer-name'>Login</span>
+            </NavLink>
+            <NavLink
+              to="/register"
+              className={({isActive}) => `header__userActionsContainer-actionContainer header__userActionsContainer-actionContainer${isActive ? '--active' : ''}`}
+            >
+              <div className='header__userActionsContainer-actionContainer-logo'>
+                <FaPen />
+              </div>
+              <span className='header__userActionsContainer-actionContainer-name'>Register</span>
+            </NavLink>
+          </div>
+          <div className={`header__userActionsContainer${auth ? '--active' : ''}`}>
+            <NavLink
+              to={`/profile/${localStorage.getItem('userId')}`}
+              className={({isActive}) => `header__userActionsContainer-actionContainer header__userActionsContainer-actionContainer${isActive ? '--active' : ''}`}
+            >
+              <div className='header__userActionsContainer-actionContainer-logo'>
+                <FaUserAlt />
+              </div>
+              <span className='header__userActionsContainer-actionContainer-name'>My profile</span>
+            </NavLink>
+            <NavLink
+              to="/logout"
+              className={({isActive}) => `header__userActionsContainer-actionContainer header__userActionsContainer-actionContainer${isActive ? '--active' : ''}`}
+            >
+              <div className='header__userActionsContainer-actionContainer-logo'>
+                <FaSignOutAlt />
+              </div>
+              <span className='header__userActionsContainer-actionContainer-name'>Logout</span>
+            </NavLink>
+          </div>
         </div>
     </header>
   );

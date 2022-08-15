@@ -2,7 +2,6 @@
 
 .homePage {
   padding: 1em;
-  // user-select: auto;
   min-height: 100vh;
 
   &-container {
@@ -46,26 +45,72 @@
           }
         }
       }
-      
-      .glide__slide--active + .glide__slide + .glide__slide {
-        transform-origin: 50% 0;
-        transition: transform 400ms;
-      }
-  
-      .glide__slide--active + .glide__slide + .glide__slide + .glide__slide {
-        transition: transform 200ms;
-        transform-origin: 50% 0;
-        transform: scale(1.1);
-      }
-
-      .glide__slide--active + .glide__slide + .glide__slide + .glide__slide + .glide__slide {
-        transform-origin: 50% 0;
-        transition: transform 400ms;
-      }
     }
   }
 }
 
 .glide__arrow {
   background-color: vars.$primary-color;
+}
+
+@media screen and (min-width: 1651px) {
+  .glide__slide--active + .glide__slide + .glide__slide {
+    transform-origin: 50% 0;
+    transition: transform 400ms;
+  }
+
+  .glide__slide--active + .glide__slide + .glide__slide + .glide__slide {
+    transition: transform 200ms;
+    transform-origin: 50% 0;
+    transform: scale(1.1);
+  }
+
+  .glide__slide--active + .glide__slide + .glide__slide + .glide__slide + .glide__slide {
+    transform-origin: 50% 0;
+    transition: transform 400ms;
+  }
+}
+
+@media screen and (min-width: 1251px) and (max-width: 1650px) {
+  .glide__slide--active + .glide__slide {
+    transform-origin: 50% 0;
+    transition: transform 400ms;
+  }
+
+  .glide__slide--active + .glide__slide + .glide__slide {
+    transition: transform 200ms;
+    transform-origin: 50% 0;
+    transform: scale(1.1);
+  }
+
+  .glide__slide--active + .glide__slide + .glide__slide + .glide__slide {
+    transform-origin: 50% 0;
+    transition: transform 400ms;
+  }
+}
+
+@media screen and (min-width: 881px) and (max-width: 1250px) {
+  .glide__slide--active {
+    transform-origin: 50% 0;
+    transition: transform 400ms;
+  }
+
+  .glide__slide--active + .glide__slide {
+    transition: transform 200ms;
+    transform-origin: 50% 0;
+    transform: scale(1.1);
+  }
+
+  .glide__slide--active + .glide__slide + .glide__slide {
+    transform-origin: 50% 0;
+    transition: transform 400ms;
+  }
+}
+
+@media screen and (max-width: 880px) {
+  .glide__slide--active {
+    transition: transform 200ms;
+    transform-origin: 50% 0;
+    transform: scale(1.1);
+  }
 }

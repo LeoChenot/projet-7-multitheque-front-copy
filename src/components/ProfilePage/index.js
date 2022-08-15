@@ -10,6 +10,7 @@ import { useEffect, useRef } from 'react';
 import { changeFetchReadUserResponse, fetchDeleteUser, fetchReadUser, fetchUpdateUser } from '../../actions/user';
 import Loader from '../Loader';
 import axios from 'axios';
+import { useState } from 'react';
 
 function ProfilePage() {
   const dispatch = useDispatch();
@@ -17,12 +18,44 @@ function ProfilePage() {
   const { userId } = useParams();
   const isInitialMount = useRef(true);
 
+  const [loadingNumberInLibrary, setLoadingNumberInLibrary] = useState(true);
+  const [moviesNumber, setMoviesNumber] = useState(0);  
+  const [seriesNumber, setSeriesNumber] = useState(0);
+  const [booksNumber, setBooksNumber] = useState(0);
+  const [videoGamesNumber, setVideoGamesNumber] = useState(0);
+
+  const token = localStorage.getItem('token');
+
   const { edit } = useSelector((state) => state.profile);
   const {
     auth,
     fetchReadUserLoading,
     fetchReadUserResponse,
   } = useSelector((state) => state.user);
+
+  const fetchLibraries = async () => {
+    try {
+      const movies = await axios.get(`https://collectio-app.herokuapp.com/api/movie`, {headers: {"authorization": token}});
+      const series = await axios.get(`https://collectio-app.herokuapp.com/api/series`, {headers: {"authorization": token}});
+      const books = await axios.get(`https://collectio-app.herokuapp.com/api/book`, {headers: {"authorization": token}});
+      const videoGames = await axios.get(`https://collectio-app.herokuapp.com/api/video_game`, {headers: {"authorization": token}});
+
+      setMoviesNumber(movies.data.length);
+      setSeriesNumber(series.data.length);
+      setBooksNumber(books.data.length);
+      setVideoGamesNumber(videoGames.data.length);
+      
+      setLoadingNumberInLibrary(false);
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      fetchLibraries();
+    }, 1200);
+  }, []);
   
   // /**
   //  * ! show fetchReadUserResponse in console
@@ -71,7 +104,7 @@ function ProfilePage() {
 
     const formData = new FormData();
     formData.append('image', event.target.files[0], event.target.files[0].name);
-    const response = await axios.post(`http://localhost:4200/api/profile/6/upload`, formData, {
+    const response = await axios.post(`https://collectio-app.herokuapp.com/api/profile/${userId}/upload`, formData, {
       headers: {
         'content-type': 'multipart/form-data',
       }
@@ -80,6 +113,8 @@ function ProfilePage() {
     dispatch(changeFetchReadUserResponse("pictureurl", response.data.url));
 
   }
+
+  console.log(loadingNumberInLibrary);
 
   useEffect(() => {
     if (!auth) {
@@ -219,36 +254,40 @@ function ProfilePage() {
         </form>
       )}
       <h2 className="profilePage-title" style={{ marginTop: '1em' }}>Categories</h2>
-      <div className="profilePage__categories">
-        <Link
-          to="/movies"
-          className="profilePage__categories-item"
-        >
-          <span className="profilePage__categories-item-name">Movies</span>
-          <span className="profilePage__categories-item-number">9</span>
-        </Link>
-        <Link
-          to="/series"
-          className="profilePage__categories-item"
-        >
-          <span className="profilePage__categories-item-name">Series</span>
-          <span className="profilePage__categories-item-number">6</span>
-        </Link>
-        <Link
-          to="/books"
-          className="profilePage__categories-item"
-        >
-          <span className="profilePage__categories-item-name">Books</span>
-          <span className="profilePage__categories-item-number">6</span>
-        </Link>
-        <Link
-          to="/video-games"
-          className="profilePage__categories-item"
-        >
-          <span className="profilePage__categories-item-name">Video games</span>
-          <span className="profilePage__categories-item-number">0</span>
-        </Link>
-      </div>
+      {loadingNumberInLibrary ? (
+        <Loader />
+      ) : (
+        <div className="profilePage__categories">
+          <Link
+            to="/movies"
+            className="profilePage__categories-item"
+          >
+            <span className="profilePage__categories-item-name">Movies</span>
+            <span className="profilePage__categories-item-number">{moviesNumber}</span>
+          </Link>
+          <Link
+            to="/series"
+            className="profilePage__categories-item"
+          >
+            <span className="profilePage__categories-item-name">Series</span>
+            <span className="profilePage__categories-item-number">{seriesNumber}</span>
+          </Link>
+          <Link
+            to="/books"
+            className="profilePage__categories-item"
+          >
+            <span className="profilePage__categories-item-name">Books</span>
+            <span className="profilePage__categories-item-number">{booksNumber}</span>
+          </Link>
+          <Link
+            to="/video-games"
+            className="profilePage__categories-item"
+          >
+            <span className="profilePage__categories-item-name">Video games</span>
+            <span className="profilePage__categories-item-number">{videoGamesNumber}</span>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

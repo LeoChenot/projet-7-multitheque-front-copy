@@ -25,6 +25,8 @@ const fetchVideoGamesMW = (store) => (next) => async (action) => {
       // ----------------------
 
       const latestVideoGamesReleaseResult = await instance.get(`/games?key=${videoGamesApiKey}&dates=${lastYear},${currentDate}`);
+      // const latestVideoGamesReleaseResult = await instance.get(`/games?key=${videoGamesApiKey}&ordering=-released+-rating`);
+      
       store.dispatch(saveLatestVideoGamesReleaseResult(latestVideoGamesReleaseResult.data));
       setTimeout(() => {
         store.dispatch(setLatestVideoGamesReleaseLoading(false));

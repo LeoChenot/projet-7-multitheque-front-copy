@@ -170,7 +170,7 @@ function MovieDetails() {
                   <ion-icon name="heart"></ion-icon></span>
               </button>
               :                    
-              <button type="button" className="button" value='favorite' onClick={() => PostReview('favorite', movieDetailsResults.movieDetailsResult.original_title, movieDetailsResults.movieDetailsResult.poster_path)}>
+              <button type="button" className="button" value='favorite' onClick={() => PostReview('favorite', movieDetailsResults.movieDetailsResult.original_title, `${baseURL}${movieDetailsResults.movieDetailsResult.poster_path}`)}>
                 <span className="button__text">Favorite</span>
                 <span className="button__icon">
                   <ion-icon name="heart"></ion-icon></span>
@@ -183,7 +183,7 @@ function MovieDetails() {
                 </span>
               </button>
               :
-              <button type="button" className="button" value='check' onClick={() => PostReview('check', movieDetailsResults.movieDetailsResult.original_title, movieDetailsResults.movieDetailsResult.poster_path)}>
+              <button type="button" className="button" value='check' onClick={() => PostReview('check', movieDetailsResults.movieDetailsResult.original_title, `${baseURL}${movieDetailsResults.movieDetailsResult.poster_path}`)}>
                 <span className="button__text">To Library</span>
                 <span className="button__icon">
                 <ion-icon name="checkmark"></ion-icon>
@@ -197,7 +197,7 @@ function MovieDetails() {
                 </span>
               </button>
               :
-              <button type="button" className="button" value='in_progress' onClick={() => PostReview('in_progress', movieDetailsResults.movieDetailsResult.original_title, movieDetailsResults.movieDetailsResult.poster_path)}>
+              <button type="button" className="button" value='in_progress' onClick={() => PostReview('in_progress', movieDetailsResults.movieDetailsResult.original_title, `${baseURL}${movieDetailsResults.movieDetailsResult.poster_path}`)}>
                 <span className="button__text">In Progress</span>
                 <span className="button__icon">
                 <ion-icon name="eye"></ion-icon>

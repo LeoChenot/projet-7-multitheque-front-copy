@@ -8,18 +8,25 @@ import './style.scss';
 
 function SeriesDetails() {
   const token = localStorage.getItem('token');
-  const { seriesDetailsLoading, seriesDetailsResults } = useSelector((state) => state.seriesDetails);
-  const seriesId = useParams().mediaId;
+  const userId = localStorage.getItem('userId');
   const [inLibrary, setInLibrary] = useState(false);
+  const [reviewDetails, setReviewDetails] = useState({});
+  const [libraryList, setLibraryList] = useState('');
   const { auth } = useSelector((state) => state.user);
   let baseURL = "https://image.tmdb.org/t/p/original";
-  
   const dispatch = useDispatch();
+  const { seriesDetailsLoading, seriesDetailsResults } = useSelector((state) => state.seriesDetails);
+  const seriesId = useParams().mediaId;
+  
 
   useEffect(() => {
     dispatch(fetchSeriesDetailsById(seriesId));
-    GetReview();
-  }, []);
+  }, [userId]);
+  useEffect(() => {
+    GetReview();    
+  }, [libraryList, inLibrary])
+
+  console.log(seriesDetailsResults);
 
   async function GetReview() {
     console.log('get')
@@ -39,6 +46,7 @@ function SeriesDetails() {
 
       } else {
         setInLibrary(true)
+        setLibraryList(response.data.user_review_details[0].listname);
       }  
         
       } catch (error) {
@@ -56,8 +64,6 @@ function SeriesDetails() {
             "authorization": token
           },
         })
-        console.log(`Voici la reponse du delete`);     
-        console.log(response)
         setInLibrary(false)
       } catch (error) {
         console.log(error)
@@ -69,8 +75,9 @@ function SeriesDetails() {
   async function PostReview(list, title, coverURL) {
     console.log('post')
       try {
-        // console.log(list)
-        // console.log(title)
+        console.log(list)
+        console.log(title)
+        console.log(coverURL);
         const response = await axios.post(`https://collectio-app.herokuapp.com/api/series/${seriesId}`, {
            "list": list,
            "title": title,
@@ -80,10 +87,8 @@ function SeriesDetails() {
             "authorization": token
           },
         })
-        console.log(response);
-        //setResults(response.data[0].note_moyenne)
-        //console.log(results);
-        setInLibrary(true)
+        setInLibrary(true);
+        setLibraryList(list);
       } catch (error) {
         console.log(error)
       }
@@ -105,9 +110,7 @@ function SeriesDetails() {
            "authorization": token
          },
        })
-       console.log(response);
-       //setResults(response.data[0].note_moyenne)
-       //console.log(results);
+       setLibraryList(list);
      } catch (error) {
        console.log(error)
      }
@@ -177,7 +180,9 @@ function SeriesDetails() {
         <div className="mediaImageContainer"> 
           <h1 className="mediaDetails__mediaTitle">{seriesDetailsResults.seriesDetailsResult.original_name}</h1>
           <img src={`https://image.tmdb.org/t/p/original/${seriesDetailsResults.seriesDetailsResult.poster_path}`} alt="" />
-          <h4 className="mediaDetails__mediaAirDate">{seriesDetailsResults.seriesDetailsResult.first_air_date.substring(0,4)}-{seriesDetailsResults.seriesDetailsResult.last_air_date.substring(0,4)} </h4>
+          {seriesDetailsResults.seriesDetailsResult.first_air_date && seriesDetailsResults.seriesDetailsResult.last_air_date && (
+            <h4 className="mediaDetails__mediaAirDate">{seriesDetailsResults.seriesDetailsResult.first_air_date.substring(0,4)}-{seriesDetailsResults.seriesDetailsResult.last_air_date.substring(0,4)} </h4>
+          )}
           <h4 className="mediaDetails__mediaSeasonsAndEpisodes">{seriesDetailsResults.seriesDetailsResult.number_of_seasons} seasons - {seriesDetailsResults.seriesDetailsResult.number_of_episodes} episodes ({seriesDetailsResults.seriesDetailsResult.episode_run_time} minutes)</h4>                    
           <div className='mediaDetails__mediaGenreContainer'>
                 {seriesDetailsResults.seriesDetailsResult.genres.map((genre) => (
@@ -187,113 +192,82 @@ function SeriesDetails() {
         </div>
         
         <div className="mediaTextContainer">
-
-          
-        {auth && (
-            <div>
-
-              
-          <div className='mediaUserListContainer'>
-            { inLibrary?
-
-
-
-            // si PAS de token, griser les boutons d'ajout de liste
-              <button type="button" className="button--activelist" value='wishlist' onClick={() => PatchReview('wishlist')}>
+          <div>
+            { inLibrary &&  <div><p>{reviewDetails.note}</p><p>{reviewDetails.comment}</p></div>}
+          </div>
+          {auth && (
+          <div>
+            <div className='mediaUserListContainer'>
+              {inLibrary &&
+              <button type="button" className="button button--delete" onClick={() => DeleteReview()}>
+                <span className="button__text">Delete</span>
+                <span className="button__icon">
+                <ion-icon name="trash-outline"></ion-icon></span>
+              </button>}
+              { inLibrary?
+              <button type="button" className={`button ${libraryList === 'wishlist' ? "button--dark_green" : ""}`} value='wishlist' onClick={() => PatchReview('wishlist')}>
                 <span className="button__text">Wishlist</span>
                 <span className="button__icon">
                 <ion-icon name="bookmark"></ion-icon></span>
               </button>
-            :
-                <button type="button" className="button" value='wishlist' onClick={() => PostReview('wishlist', seriesDetailsResults.seriesDetailsResult.original_name, `${baseURL}${seriesDetailsResults.seriesDetailsResult.poster_path}`)}>
-                  <span className="button__text">Wishlist</span>
-                  <span className="button__icon">
-                  <ion-icon name="bookmark"></ion-icon></span>
-                </button>
-
-            }
-
-            { inLibrary?
-
-            // si PAS de token, griser les boutons d'ajout de liste
-              <button type="button" className="button--activelist" value='favorites' onClick={() => PatchReview('favorite')}>
-                  <span className="button__text">Favorites</span>
-                  <span className="button__icon">
-                  <ion-icon name="bookmark"></ion-icon></span>
-                </button>
-            :                    
-
-              <button type="button" className="button" value='favorites' onClick={() => PostReview('favorite', seriesDetailsResults.seriesDetailsResult.original_name, seriesDetailsResults.seriesDetailsResult.poster_path)}>
-              <span className="button__text">Favorites</span>
-              <span className="button__icon">
-                <ion-icon name="heart"></ion-icon></span>
-              </button>
-                
-            }   
-
-            { inLibrary? 
-
-              <button type="button" className="button--activelist" value='check' onClick={() => PatchReview('check')}>
-              <span className="button__text">Add to Library</span>
-              <span className="button__icon">
-                <ion-icon name="checkmark"></ion-icon>
-              </span>
-              </button>
-            :
-              <button type="button" className="button" value='check' onClick={() => PostReview('check', seriesDetailsResults.seriesDetailsResult.original_name, seriesDetailsResults.seriesDetailsResult.poster_path)}>
-              <span className="button__text">Add to Library</span>
-              <span className="button__icon">
-              <ion-icon name="checkmark"></ion-icon>
-              </span>
-              </button>
-            }
-
-            { inLibrary? 
-
-            // si PAS de token, griser les boutons d'ajout de liste
-              <button type="button" className="button--activelist" value='in_progress' onClick={() => PatchReview("in_progress")}>
-              <span className="button__text">In Progress</span>
-              <span className="button__icon">
-                <ion-icon name="eye"></ion-icon>
-              </span>
-              </button>
-            :
-              <button type="button" className="button" value='in_progress' onClick={() => PostReview('in_progress', seriesDetailsResults.seriesDetailsResult.original_name, seriesDetailsResults.seriesDetailsResult.poster_path)}>
-              <span className="button__text">In Progress</span>
-              <span className="button__icon">
-              <ion-icon name="eye"></ion-icon>
-              </span>
-              </button>
-            }
-
-            { inLibrary?
-
-            <button type="button" className="button button--delete" onClick={() => DeleteReview()}>
-                  <span className="button__text">Delete</span>
-                  <span className="button__icon">
-                  <ion-icon name="trash-outline"></ion-icon></span>
-                </button>
               :
-                null
-              
-            }
-
-          </div>
-                      
-          
-
+              <button type="button" className="button" value='wishlist' onClick={() => PostReview('wishlist', seriesDetailsResults.seriesDetailsResult.original_name, `${baseURL}${seriesDetailsResults.seriesDetailsResult.poster_path}`)}>
+                <span className="button__text">Wishlist</span>
+                <span className="button__icon">
+                <ion-icon name="bookmark"></ion-icon></span>
+              </button>}
+              { inLibrary?
+              <button type="button" className={`button ${libraryList === 'favorite' ? "button--dark_green" : ""}`} value='favorite' onClick={() => PatchReview('favorite')}>
+                  <span className="button__text">Favorite</span>
+                  <span className="button__icon">
+                  <ion-icon name="heart"></ion-icon></span>
+              </button>
+              :                    
+              <button type="button" className="button" value='favorite' onClick={() => PostReview('favorite', seriesDetailsResults.seriesDetailsResult.original_name, `${baseURL}${seriesDetailsResults.seriesDetailsResult.poster_path}`)}>
+                <span className="button__text">Favorite</span>
+                <span className="button__icon">
+                  <ion-icon name="heart"></ion-icon></span>
+              </button>}
+              { inLibrary? 
+              <button type="button" className={`button ${libraryList === 'check' ? "button--dark_green" : ""}`} value='check' onClick={() => PatchReview('check')}>
+                <span className="button__text">To Library</span>
+                <span className="button__icon">
+                  <ion-icon name="checkmark"></ion-icon>
+                </span>
+              </button>
+              :
+              <button type="button" className="button" value='check' onClick={() => PostReview('check', seriesDetailsResults.seriesDetailsResult.original_name, `${baseURL}${seriesDetailsResults.seriesDetailsResult.poster_path}`)}>
+                <span className="button__text">To Library</span>
+                <span className="button__icon">
+                <ion-icon name="checkmark"></ion-icon>
+                </span>
+              </button>}
+              { inLibrary? 
+              <button type="button" className={`button ${libraryList === 'in_progress' ? "button--dark_green" : ""}`} value='in_progress' onClick={() => PatchReview("in_progress")}>
+                <span className="button__text">In Progress</span>
+                <span className="button__icon">
+                  <ion-icon name="eye"></ion-icon>
+                </span>
+              </button>
+              :
+              <button type="button" className="button" value='in_progress' onClick={() => PostReview('in_progress', seriesDetailsResults.seriesDetailsResult.original_name, `${baseURL}${seriesDetailsResults.seriesDetailsResult.poster_path}`)}>
+                <span className="button__text">In Progress</span>
+                <span className="button__icon">
+                <ion-icon name="eye"></ion-icon>
+                </span>
+              </button>}
+            </div>
           </div>  
-
-        )}
+          )}
           
-          <div className="mediaCrewContainer">   
+        <div className="mediaCrewContainer">   
           <h3 className="mediaDetails__mediaCast">Director{seriesDetailsResults.seriesDetailsCastResult.crew.filter((crew) => crew.known_for_department === "Directing").length > 1 ? 's' : ''}</h3>
           <br />
             <div className='mediaDetails__mediaCrew'> 
             {seriesDetailsResults.seriesDetailsCastResult.crew.filter((crew) => crew.known_for_department === "Directing").slice(0, 5).map((crew) => (
               <h4 key={crew.id} className="mediaDetails__mediaCrew">{crew.name}</h4>
             ))}
-              </div> 
+            </div> 
         </div>
 
         <div className="mediaCastContainer">

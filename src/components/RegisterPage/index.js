@@ -84,29 +84,33 @@ function RegisterPage() {
   }, [auth]);
 
   const years = [];
+  const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+  const days = [];
+  
   
   let iteration = 120;
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  console.log({currentYear});
-  
   for (let index = 0; index <= iteration; index++) {
     years.push(currentYear - index);
   }
+
+  
   useEffect(() => {
+
   }, []);
 
-  useEffect(() => {
-    console.log(years);
-
-  }, [years]);
-
-
-  const dataTemp = {
-    years: ["2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001", "2000", "1999", "1998", "1997", "1996", "1995", "1994", "1993", "1992", "1991", "1990", "1989", "1988", "1987", "1986", "1985", "1984", "1983", "1982", "1981", "1980", "1979", "1978", "1977", "1976", "1975", "1974", "1973", "1972"],
-    months: [ "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December" ],
-    days: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"],
+  if (bMonth !== '') {
+    let numberMonth = null;
+    months.forEach((month) => {
+      if (bMonth === month.toLowerCase()) {
+        numberMonth = months.indexOf(month) + 1;
+      }
+    });
+    const numberOfDays = new Date(Number(bYear), numberMonth, 0).getDate();
+    for (let index = 1; index <= numberOfDays; index++) {
+      days.push(index);
+    }
   }
 
   return (
@@ -173,9 +177,10 @@ function RegisterPage() {
               id="registerPage-bMonth"
               value={bMonth}
               onChange={(event) => dispatch(changeInputValueRegister("bMonth", event.target.value))}
+              disabled={bYear !== '' ? false : true}
             >
               <option value={null} hidden></option>
-              {dataTemp.months.map((month) => (
+              {months.map((month) => (
                 <option key={month} value={month.toLowerCase()}>{month}</option>
               ))}
             </select>
@@ -187,10 +192,11 @@ function RegisterPage() {
               id="registerPage-bDay"
               value={bDay}
               onChange={(event) => dispatch(changeInputValueRegister("bDay", event.target.value))}
+              disabled={bMonth !== '' ? false : true}
             >
               <option value={null} hidden></option>
-              {dataTemp.days.map((day) => (
-                <option key={day} value={day.toLowerCase()}>{day}</option>
+              {days.map((day) => (
+                <option key={day} value={day}>{day}</option>
               ))}
             </select>
           </div>
