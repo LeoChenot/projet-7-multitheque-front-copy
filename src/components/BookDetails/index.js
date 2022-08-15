@@ -26,7 +26,6 @@ function BookDetails() {
   }, [libraryList, inLibrary]);
 
   async function GetReview() {
-    console.log('get')
       try {
         const response = await axios.get(`https://collectio-app.herokuapp.com/api/book/${bookId}`,{
           headers: {
@@ -46,7 +45,7 @@ function BookDetails() {
 
   async function DeleteReview() {
     try {
-      const response = await axios.delete(`https://collectio-app.herokuapp.com/api/book/${bookId}`,{
+      await axios.delete(`https://collectio-app.herokuapp.com/api/book/${bookId}`,{
         headers: {
           "authorization": token
         },
@@ -58,12 +57,8 @@ function BookDetails() {
   };
 
   async function PostReview(list, title, coverURL) {
-    console.log('post')
       try {
-        console.log(list)
-        console.log(title)
-        console.log(coverURL);
-        const response = await axios.post(`https://collectio-app.herokuapp.com/api/book/${bookId}`, {
+        await axios.post(`https://collectio-app.herokuapp.com/api/book/${bookId}`, {
            "list": list,
            "title": title,
            "coverURL": coverURL
@@ -71,30 +66,27 @@ function BookDetails() {
           headers: {
             "authorization": token
           },
-        })
+        });
         setInLibrary(true);
         setLibraryList(list);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
 
   }
 
   async function PatchReview(list) {
-
-    console.log('patch')
      try {
-
-       const response = await axios.patch(`https://collectio-app.herokuapp.com/api/book/${bookId}`, {
+      await axios.patch(`https://collectio-app.herokuapp.com/api/book/${bookId}`, {
           "list": list
         }, {
          headers: {
            "authorization": token
          },
-       })
+       });
        setLibraryList(list);
      } catch (error) {
-       console.log(error)
+       console.log(error);
      }
 
 

@@ -15,7 +15,6 @@ function LoginPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Je veux me connecter');
     dispatch(login());
   }
   

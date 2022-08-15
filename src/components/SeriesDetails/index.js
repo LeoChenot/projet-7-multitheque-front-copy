@@ -24,61 +24,46 @@ function SeriesDetails() {
   }, [userId]);
   useEffect(() => {
     GetReview();    
-  }, [libraryList, inLibrary])
-
-  console.log(seriesDetailsResults);
+  }, [libraryList, inLibrary]);
 
   async function GetReview() {
-    console.log('get')
       try {
-
         const response = await axios.get(`https://collectio-app.herokuapp.com/api/series/${seriesId}`,{
           headers: {
             "authorization": token
           },
-        })                
+        });
 
         if (response.request.response === `{"message":"This Media is not in user Library yet","avg_rating":[]}`) {
-
-          console.log("no review")
-
-          setInLibrary(false)
-
-      } else {
-        setInLibrary(true)
-        setLibraryList(response.data.user_review_details[0].listname);
-      }  
-        
+          setInLibrary(false);
+        }
+        else {
+          setInLibrary(true);
+          setLibraryList(response.data.user_review_details[0].listname);
+        }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-
   }
 
   async function DeleteReview() {
-    console.log('delete')
       try {
-
-        const response = await axios.delete(`https://collectio-app.herokuapp.com/api/series/${seriesId}`,{
+        await axios.delete(`https://collectio-app.herokuapp.com/api/series/${seriesId}`,{
           headers: {
             "authorization": token
           },
-        })
+        });
         setInLibrary(false)
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
 
   }
 
 
   async function PostReview(list, title, coverURL) {
-    console.log('post')
       try {
-        console.log(list)
-        console.log(title)
-        console.log(coverURL);
-        const response = await axios.post(`https://collectio-app.herokuapp.com/api/series/${seriesId}`, {
+        await axios.post(`https://collectio-app.herokuapp.com/api/series/${seriesId}`, {
            "list": list,
            "title": title,
            "coverURL": coverURL
@@ -86,36 +71,27 @@ function SeriesDetails() {
           headers: {
             "authorization": token
           },
-        })
+        });
         setInLibrary(true);
         setLibraryList(list);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-
   }
 
-  
-
-
   async function PatchReview(list) {
-
-    console.log('patch')
      try {
-
-       const response = await axios.patch(`https://collectio-app.herokuapp.com/api/series/${seriesId}`, {
+       await axios.patch(`https://collectio-app.herokuapp.com/api/series/${seriesId}`, {
           "list": list
         }, {
          headers: {
            "authorization": token
          },
-       })
+       });
        setLibraryList(list);
      } catch (error) {
-       console.log(error)
+       console.log(error);
      }
-
-
   }
 
   // /**

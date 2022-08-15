@@ -21,30 +21,23 @@ function VideoGameDetails() {
   useEffect(() => {
     dispatch(fetchVideoGameDetailsById(videoGameId));
   }, [userId]);
-  useEffect(() => {    
+  useEffect(() => {
     GetReview();      
   }, [libraryList, inLibrary]);
 
-  if (videoGameDetailsResult) {
-    console.log(videoGameDetailsResult.background_image);
-  }
-
   async function GetReview() {
-    console.log('get')
       try {
         const response = await axios.get(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`,{
           headers: {
             "authorization": token
           },
-        });
-        console.log(response);             
+        });            
         if (response.request.response === `{"message":"This Media is not in user Library yet","avg_rating":[]}`) {
           setInLibrary(false);
         } else {
           setInLibrary(true);
           setLibraryList(response.data.user_review_details[0].listname);
         }
-        // setInLibrary(false); 
       } catch (error) {
         console.log(error);
       }
@@ -52,7 +45,7 @@ function VideoGameDetails() {
 
   async function DeleteReview() {
     try {
-      const response = await axios.delete(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`,{
+      await axios.delete(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`,{
         headers: {
           "authorization": token
         },
@@ -64,12 +57,8 @@ function VideoGameDetails() {
   };
 
   async function PostReview(list, title, coverURL) {
-    console.log('post')
       try {
-        console.log(list)
-        console.log(title)
-        console.log(coverURL);
-        const response = await axios.post(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`, {
+        await axios.post(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`, {
            "list": list,
            "title": title,
            "coverURL": coverURL
@@ -77,33 +66,27 @@ function VideoGameDetails() {
           headers: {
             "authorization": token
           },
-        })
+        });
         setInLibrary(true);
         setLibraryList(list);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-
   }
 
   async function PatchReview(list) {
-
-    console.log('patch')
      try {
-
-       const response = await axios.patch(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`, {
+      await axios.patch(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`, {
           "list": list
         }, {
          headers: {
            "authorization": token
          },
-       })
+       });
        setLibraryList(list);
      } catch (error) {
        console.log(error)
      }
-
-
   }
 
   // /**

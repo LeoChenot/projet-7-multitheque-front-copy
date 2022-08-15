@@ -35,7 +35,6 @@ function RegisterPage() {
       return window.alert("Veuillez corriger le formulaire!")
     }
     event.preventDefault();
-    console.log('Je veux m\'enregistrer');
     dispatch(fetchCreateUser());
   }
 
@@ -53,7 +52,6 @@ function RegisterPage() {
   
   let passwordConfirmMessage = '';
   if (password2.length>0 && password2 !== password1) {
-    console.log('Password ok');
     passwordConfirmMessage = 'passwords must match';
   }
 

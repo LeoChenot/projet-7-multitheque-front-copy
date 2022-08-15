@@ -27,7 +27,6 @@ function MovieDetails() {
   }, [libraryList, inLibrary]);
 
   async function GetReview() {
-    console.log('get')
       try {
         const response = await axios.get(`https://collectio-app.herokuapp.com/api/movie/${movieId}`,{
           headers: {
@@ -47,7 +46,7 @@ function MovieDetails() {
 
   async function DeleteReview() {
       try {
-        const response = await axios.delete(`https://collectio-app.herokuapp.com/api/movie/${movieId}`,{
+        await axios.delete(`https://collectio-app.herokuapp.com/api/movie/${movieId}`,{
           headers: {
             "authorization": token
           },
@@ -60,7 +59,7 @@ function MovieDetails() {
 
   async function PostReview(list, title, coverURL) {
     try {
-      const response = await axios.post(`https://collectio-app.herokuapp.com/api/movie/${movieId}`, {
+      await axios.post(`https://collectio-app.herokuapp.com/api/movie/${movieId}`, {
           "list": list,
           "title": title,
           "coverURL": coverURL
@@ -78,7 +77,7 @@ function MovieDetails() {
 
   async function PatchReview(list) {
     try {
-      const response = await axios.patch(`https://collectio-app.herokuapp.com/api/movie/${movieId}`, {
+      await axios.patch(`https://collectio-app.herokuapp.com/api/movie/${movieId}`, {
         "list": list
       }, {
         headers: {

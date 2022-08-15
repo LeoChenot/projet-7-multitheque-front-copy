@@ -47,7 +47,7 @@ function ProfilePage() {
       
       setLoadingNumberInLibrary(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -76,7 +76,6 @@ function ProfilePage() {
   }, []);
 
   const handleEdit = () => {
-    console.log('Je veux editer mon profil');
     dispatch(toggleEditProfile());
   };
 
@@ -98,10 +97,6 @@ function ProfilePage() {
   }
 
   const handleChangeImage = async (event) => {
-    console.log(event.target.files[0]);
-    console.log(event.target.files[0].name);
-
-
     const formData = new FormData();
     formData.append('image', event.target.files[0], event.target.files[0].name);
     const response = await axios.post(`https://collectio-app.herokuapp.com/api/profile/${userId}/upload`, formData, {
@@ -109,12 +104,9 @@ function ProfilePage() {
         'content-type': 'multipart/form-data',
       }
     });
-    console.log(response);
     dispatch(changeFetchReadUserResponse("pictureurl", response.data.url));
 
   }
-
-  console.log(loadingNumberInLibrary);
 
   useEffect(() => {
     if (!auth) {

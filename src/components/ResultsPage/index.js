@@ -55,7 +55,6 @@ function ResultsPage() {
   }
 
   useEffect(() => {
-    console.log('Je fetch all');
     dispatch(fetchInAllApiByTitle(title));
     dispatch(changeInputValueHeader("searchBar", ""));
   }, [title]);

@@ -12,7 +12,6 @@ const setInstanceAuthorization = () => {
   if (localStorage.getItem('token')) {
     const token = localStorage.getItem('token');
     instance.defaults.headers.common.authorization = token;
-    console.log(instance.defaults.headers.common);
   }
 }
 setInstanceAuthorization();
@@ -71,7 +70,6 @@ const authMW = (store) => (next) => async (action) => {
   else if (action.type === FETCH_UPDATE_USER) {
     const state = store.getState();
     try {
-      console.log('Données envoyées :', state.user.fetchReadUserResponse);
       const response = await instance.patch(`/api/profile/${state.user.userId}`, {
         bio: state.user.fetchReadUserResponse.bio,
         email: state.user.fetchReadUserResponse.email,
@@ -81,7 +79,6 @@ const authMW = (store) => (next) => async (action) => {
         pictureurl: state.user.fetchReadUserResponse.pictureurl,
         username: state.user.fetchReadUserResponse.username,
       });
-      console.log(response);
       if (response.status === 200) {
         store.dispatch(fetchReadUser());
       }

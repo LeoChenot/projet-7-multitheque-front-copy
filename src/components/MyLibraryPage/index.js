@@ -10,7 +10,6 @@ const MyLibraryPage = (props) => {
   const [libraryList, setLibraryList] = useState([]);
   const token = localStorage.getItem('token');
   let baseURL = "https://image.tmdb.org/t/p/original";
-  // const tokenTest = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTY1Mjc3NzE2MSwiZXhwIjoxNzM5MTc3MTYxfQ.qBFTFlkJvKz8f106Axdtsot-Xx43gaf3lAP3Hch5dm4`
 
   const fetchLibrary = async () => {
     setLibraryList([]);
@@ -22,28 +21,19 @@ const MyLibraryPage = (props) => {
         }
        });
       if (response.status === 200) {
-        console.log('response :', response.data);
         setLibraryList(response.data);
         setTimeout(() => {
           setIsLoaded(true);
         }, 500);
       };
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   useEffect (() => {
-    //return () => {
-      fetchLibrary()
-    //}
-  }, [libraryType])
-
-  useEffect(() => {
-    console.log({ isLoaded });
-  }, [isLoaded]);
-
-  console.log(libraryList)
+    fetchLibrary();
+  }, [libraryType]);
 
   if (libraryList.length === 0) {
     return (

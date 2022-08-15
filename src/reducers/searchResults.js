@@ -25,7 +25,6 @@ const initialState = {
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case SAVE_FOUND_MOVIES_RESULT: {
-      console.log('action dans reducer Movie', action);
       return {
         ...state,
         foundMoviesResult: action.newFoundMoviesResult,
