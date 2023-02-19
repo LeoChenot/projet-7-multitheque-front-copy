@@ -4,7 +4,7 @@ import { setFetchRegisterResponseCode } from "../actions/register";
 import { fetchReadUser, FETCH_CREATE_USER, FETCH_DELETE_USER, FETCH_READ_USER, FETCH_UPDATE_USER, saveFetchReadUserResponse, saveUserData, setFetchCreateUserLoading, setFetchReadUserLoading } from "../actions/user";
 
 const instance = axios.create({
-  baseURL: 'https://collectio-app.herokuapp.com',
+  baseURL: 'https://collectio-copy.glitch.me',
   // baseURL: 'http://localhost:4200',
 });
 

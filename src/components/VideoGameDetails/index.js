@@ -57,21 +57,21 @@ function VideoGameDetails() {
   };
 
   async function PostReview(list, title, coverURL) {
-      try {
-        await axios.post(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`, {
-           "list": list,
-           "title": title,
-           "coverURL": coverURL
-         }, {
-          headers: {
-            "authorization": token
-          },
-        });
-        setInLibrary(true);
-        setLibraryList(list);
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      await axios.post(`https://collectio-app.herokuapp.com/api/video_game/${videoGameId}`, {
+          "list": list,
+          "title": title,
+          "coverURL": coverURL
+        }, {
+        headers: {
+          "authorization": token
+        },
+      });
+      setInLibrary(true);
+      setLibraryList(list);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function PatchReview(list) {

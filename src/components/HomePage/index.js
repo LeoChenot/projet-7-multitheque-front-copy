@@ -4,6 +4,7 @@ import "@glidejs/glide/dist/css/glide.theme.min.css";
 
 import React, { useEffect, useRef } from 'react';
 import './style.scss';
+import './mediaQueriesMenuOpen.scss';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -13,7 +14,6 @@ import {
   fetchLatestVideoGamesRelease,
 } from '../../actions/homePage';
 import Loader from '../Loader';
-import { useLayoutEffect } from 'react';
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -21,6 +21,7 @@ function HomePage() {
   const homePageDiv = useRef(null);
 
   const menuIsOpen = useSelector((state) => state.mainMenu.isOpen);
+
   const { 
     latestMoviesReleaseLoading,
     latestSeriesReleaseLoading,
@@ -57,7 +58,6 @@ function HomePage() {
       }
     }
   }
-
 
   useEffect(() => {
     if (typeof latestMoviesReleaseResult === "undefined") {
@@ -115,125 +115,125 @@ function HomePage() {
 
   return (
     <div className="homePage" ref={homePageDiv}>
-        <div className="homePage-container">
-          <h2 style={{ fontWeight: 'bold', fontSize: '2em', marginBottom: '1.2em' }}>Movies</h2>
-          {latestMoviesReleaseLoading ? (
-            <div style={{ padding: '5em 0' }}>
-              <Loader />
+      <div className="homePage-container">
+        <h2 style={{ fontWeight: 'bold', fontSize: '2em', marginBottom: '1.2em' }}>Movies</h2>
+        {latestMoviesReleaseLoading ? (
+          <div style={{ padding: '5em 0' }}>
+            <Loader />
+          </div>
+        ) : (
+          <div className="glideContainer">
+            <div id="glideMovies" className="glide" style={{ transition: 'all 550ms' }}>
+              <div className="glide__track" data-glide-el="track">
+                <ul className="glide__slides">
+                {latestMoviesReleaseResult && latestMoviesReleaseResult.results.map((item) => (
+                  <li key={item.id} className="glide__slide">
+                    <Link to={`/movies/${item.id}`} className="glide__slide-link">
+                      <img className="glide__slide-link-image" src={`https://image.tmdb.org/t/p/original/${item.poster_path}`} alt={item.title} />
+                      <span className="glide__slide-link-title">{item.title}</span>
+                    </Link>
+                  </li>
+                ))}
+                </ul>
+                <div className="glide__arrows" data-glide-el="controls">
+                  <button className="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
+                  <button className="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
+                </div>
+              </div>
             </div>
-          ) : (
-            <div className="glideContainer">
-              <div id="glideMovies" className="glide" style={{ transition: 'all 550ms' }}>
-                <div className="glide__track" data-glide-el="track">
-                  <ul className="glide__slides">
-                  {latestMoviesReleaseResult && latestMoviesReleaseResult.results.map((item) => (
+          </div>
+        )}
+      </div>
+
+      <div className="homePage-container">
+        <h2 style={{ fontWeight: 'bold', fontSize: '2em', marginBottom: '1.2em' }}>Series</h2>
+        {latestSeriesReleaseLoading ? (
+          <div style={{ padding: '5em 0' }}>
+            <Loader />
+          </div>
+        ) : (
+          <div className="glideContainer">
+            <div id="glideSeries" className="glide" style={{ transition: 'all 550ms' }}>
+              <div className="glide__track" data-glide-el="track">
+                <ul className="glide__slides">
+                {latestSeriesReleaseResult && latestSeriesReleaseResult.results.map((item) => (
                     <li key={item.id} className="glide__slide">
-                      <Link to={`/movies/${item.id}`} className="glide__slide-link">
-                        <img className="glide__slide-link-image" src={`https://image.tmdb.org/t/p/original/${item.poster_path}`} alt={item.title} />
-                        <span className="glide__slide-link-title">{item.title}</span>
+                      <Link to={`/series/${item.id}`} className="glide__slide-link">
+                        <img className="glide__slide-link-image" src={`https://image.tmdb.org/t/p/original/${item.poster_path}`} alt={item.name} />
+                        <span className="glide__slide-link-title">{item.name}</span>
                       </Link>
                     </li>
                   ))}
-                  </ul>
-                  <div className="glide__arrows" data-glide-el="controls">
-                    <button className="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
-                    <button className="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
-                  </div>
+                </ul>
+                <div className="glide__arrows" data-glide-el="controls">
+                  <button className="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
+                  <button className="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
 
-        <div className="homePage-container">
-          <h2 style={{ fontWeight: 'bold', fontSize: '2em', marginBottom: '1.2em' }}>Series</h2>
-          {latestSeriesReleaseLoading ? (
-            <div style={{ padding: '5em 0' }}>
-              <Loader />
-            </div>
-          ) : (
-            <div className="glideContainer">
-              <div id="glideSeries" className="glide" style={{ transition: 'all 550ms' }}>
-                <div className="glide__track" data-glide-el="track">
-                  <ul className="glide__slides">
-                  {latestSeriesReleaseResult && latestSeriesReleaseResult.results.map((item) => (
-                      <li key={item.id} className="glide__slide">
-                        <Link to={`/series/${item.id}`} className="glide__slide-link">
-                          <img className="glide__slide-link-image" src={`https://image.tmdb.org/t/p/original/${item.poster_path}`} alt={item.name} />
-                          <span className="glide__slide-link-title">{item.name}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="glide__arrows" data-glide-el="controls">
-                    <button className="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
-                    <button className="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
-                  </div>
+      <div className="homePage-container">
+        <h2 style={{ fontWeight: 'bold', fontSize: '2em', marginBottom: '1.2em' }}>Books</h2>
+        {latestBooksReleaseLoading ? (
+          <div style={{ padding: '5em 0' }}>
+            <Loader />
+          </div>
+        ) : (
+          <div className="glideContainer">
+            <div id="glideBooks" className="glide" style={{ transition: 'all 550ms' }}>
+              <div className="glide__track" data-glide-el="track">
+                <ul className="glide__slides">
+                {latestBooksReleaseResult && latestBooksReleaseResult.items.map((item) => (
+                    <li key={item.id} className="glide__slide">
+                      <Link to={`/books/${item.id}`} className="glide__slide-link">
+                        <img className="glide__slide-link-image" src={item.volumeInfo.imageLinks && (item.volumeInfo.imageLinks.thumbnail) && item.volumeInfo.imageLinks.smallThumbnail } alt={item.name} />
+                        <span className="glide__slide-link-title">{item.volumeInfo.title}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <div className="glide__arrows" data-glide-el="controls">
+                  <button className="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
+                  <button className="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
 
-        <div className="homePage-container">
-          <h2 style={{ fontWeight: 'bold', fontSize: '2em', marginBottom: '1.2em' }}>Books</h2>
-          {latestBooksReleaseLoading ? (
-            <div style={{ padding: '5em 0' }}>
-              <Loader />
-            </div>
-          ) : (
-            <div className="glideContainer">
-              <div id="glideBooks" className="glide" style={{ transition: 'all 550ms' }}>
-                <div className="glide__track" data-glide-el="track">
-                  <ul className="glide__slides">
-                  {latestBooksReleaseResult && latestBooksReleaseResult.items.map((item) => (
-                      <li key={item.id} className="glide__slide">
-                        <Link to={`/books/${item.id}`} className="glide__slide-link">
-                          <img className="glide__slide-link-image" src={item.volumeInfo.imageLinks && (item.volumeInfo.imageLinks.thumbnail) && item.volumeInfo.imageLinks.smallThumbnail } alt={item.name} />
-                          <span className="glide__slide-link-title">{item.volumeInfo.title}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="glide__arrows" data-glide-el="controls">
-                    <button className="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
-                    <button className="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
-                  </div>
+      <div className="homePage-container">
+        <h2 style={{ fontWeight: 'bold', fontSize: '2em', marginBottom: '1.2em' }}>Video Games</h2>
+        {latestVideoGamesReleaseLoading ? (
+          <div style={{ padding: '5em 0' }}>
+            <Loader />
+          </div>
+        ) : (
+          <div className="glideContainer">
+            <div id="glideVideoGames" className="glide" style={{ transition: 'all 550ms' }}>
+              <div className="glide__track" data-glide-el="track">
+                <ul className="glide__slides">
+                {latestVideoGamesReleaseResult && latestVideoGamesReleaseResult.results.map((item) => (
+                    <li key={item.name} className="glide__slide">
+                      <Link to={`/video-games/${item.id}`} className="glide__slide-link">
+                        <img className="glide__slide-link-image" src={item.background_image} alt={item.name} />
+                        <span className="glide__slide-link-title">{item.name}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <div className="glide__arrows" data-glide-el="controls">
+                  <button className="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
+                  <button className="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
                 </div>
               </div>
             </div>
-          )}
-        </div>
-
-        <div className="homePage-container">
-          <h2 style={{ fontWeight: 'bold', fontSize: '2em', marginBottom: '1.2em' }}>Video Games</h2>
-          {latestVideoGamesReleaseLoading ? (
-            <div style={{ padding: '5em 0' }}>
-              <Loader />
-            </div>
-          ) : (
-            <div className="glideContainer">
-              <div id="glideVideoGames" className="glide" style={{ transition: 'all 550ms' }}>
-                <div className="glide__track" data-glide-el="track">
-                  <ul className="glide__slides">
-                  {latestVideoGamesReleaseResult && latestVideoGamesReleaseResult.results.map((item) => (
-                      <li key={item.name} className="glide__slide">
-                        <Link to={`/video-games/${item.id}`} className="glide__slide-link">
-                          <img className="glide__slide-link-image" src={item.background_image} alt={item.name} />
-                          <span className="glide__slide-link-title">{item.name}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="glide__arrows" data-glide-el="controls">
-                    <button className="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
-                    <button className="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
     
     </div>
 
