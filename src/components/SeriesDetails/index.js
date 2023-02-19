@@ -28,7 +28,7 @@ function SeriesDetails() {
 
   async function GetReview() {
       try {
-        const response = await axios.get(`https://collectio-app.herokuapp.com/api/series/${seriesId}`,{
+        const response = await axios.get(`https://collectio-copy.glitch.me/api/series/${seriesId}`,{
           headers: {
             "authorization": token
           },
@@ -48,7 +48,7 @@ function SeriesDetails() {
 
   async function DeleteReview() {
       try {
-        await axios.delete(`https://collectio-app.herokuapp.com/api/series/${seriesId}`,{
+        await axios.delete(`https://collectio-copy.glitch.me/api/series/${seriesId}`,{
           headers: {
             "authorization": token
           },
@@ -63,7 +63,7 @@ function SeriesDetails() {
 
   async function PostReview(list, title, coverURL) {
       try {
-        await axios.post(`https://collectio-app.herokuapp.com/api/series/${seriesId}`, {
+        await axios.post(`https://collectio-copy.glitch.me/api/series/${seriesId}`, {
            "list": list,
            "title": title,
            "coverURL": coverURL
@@ -81,7 +81,7 @@ function SeriesDetails() {
 
   async function PatchReview(list) {
      try {
-       await axios.patch(`https://collectio-app.herokuapp.com/api/series/${seriesId}`, {
+       await axios.patch(`https://collectio-copy.glitch.me/api/series/${seriesId}`, {
           "list": list
         }, {
          headers: {

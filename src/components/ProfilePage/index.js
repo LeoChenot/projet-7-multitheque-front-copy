@@ -35,10 +35,10 @@ function ProfilePage() {
 
   const fetchLibraries = async () => {
     try {
-      const movies = await axios.get(`https://collectio-app.herokuapp.com/api/movie`, {headers: {"authorization": token}});
-      const series = await axios.get(`https://collectio-app.herokuapp.com/api/series`, {headers: {"authorization": token}});
-      const books = await axios.get(`https://collectio-app.herokuapp.com/api/book`, {headers: {"authorization": token}});
-      const videoGames = await axios.get(`https://collectio-app.herokuapp.com/api/video_game`, {headers: {"authorization": token}});
+      const movies = await axios.get(`https://collectio-copy.glitch.me/api/movie`, {headers: {"authorization": token}});
+      const series = await axios.get(`https://collectio-copy.glitch.me/api/series`, {headers: {"authorization": token}});
+      const books = await axios.get(`https://collectio-copy.glitch.me/api/book`, {headers: {"authorization": token}});
+      const videoGames = await axios.get(`https://collectio-copy.glitch.me/api/video_game`, {headers: {"authorization": token}});
 
       setMoviesNumber(movies.data.length);
       setSeriesNumber(series.data.length);
@@ -99,7 +99,7 @@ function ProfilePage() {
   const handleChangeImage = async (event) => {
     const formData = new FormData();
     formData.append('image', event.target.files[0], event.target.files[0].name);
-    const response = await axios.post(`https://collectio-app.herokuapp.com/api/profile/${userId}/upload`, formData, {
+    const response = await axios.post(`https://collectio-copy.glitch.me/api/profile/${userId}/upload`, formData, {
       headers: {
         'content-type': 'multipart/form-data',
       }
@@ -123,7 +123,7 @@ function ProfilePage() {
   // const handleSubmitChangeProfile = async () => {
   //   console.log('Je veux envoyer les nouvelles données');
   //   try {
-  //     const response = await axios.patch(`https://collectio-app.herokuapp.com/api/profile/${localStorage.getItem('userId')}`);
+  //     const response = await axios.patch(`https://collectio-copy.glitch.me/api/profile/${localStorage.getItem('userId')}`);
   //     console.log(response.data);
   //   } catch (error) {
   //     console.log(error);

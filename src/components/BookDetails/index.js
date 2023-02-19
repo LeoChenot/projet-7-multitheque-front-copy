@@ -27,7 +27,7 @@ function BookDetails() {
 
   async function GetReview() {
       try {
-        const response = await axios.get(`https://collectio-app.herokuapp.com/api/book/${bookId}`,{
+        const response = await axios.get(`https://collectio-copy.glitch.me/api/book/${bookId}`,{
           headers: {
             "authorization": token
           },
@@ -45,7 +45,7 @@ function BookDetails() {
 
   async function DeleteReview() {
     try {
-      await axios.delete(`https://collectio-app.herokuapp.com/api/book/${bookId}`,{
+      await axios.delete(`https://collectio-copy.glitch.me/api/book/${bookId}`,{
         headers: {
           "authorization": token
         },
@@ -58,7 +58,7 @@ function BookDetails() {
 
   async function PostReview(list, title, coverURL) {
       try {
-        await axios.post(`https://collectio-app.herokuapp.com/api/book/${bookId}`, {
+        await axios.post(`https://collectio-copy.glitch.me/api/book/${bookId}`, {
            "list": list,
            "title": title,
            "coverURL": coverURL
@@ -77,7 +77,7 @@ function BookDetails() {
 
   async function PatchReview(list) {
      try {
-      await axios.patch(`https://collectio-app.herokuapp.com/api/book/${bookId}`, {
+      await axios.patch(`https://collectio-copy.glitch.me/api/book/${bookId}`, {
           "list": list
         }, {
          headers: {
